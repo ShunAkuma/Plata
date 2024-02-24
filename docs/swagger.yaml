@@ -1,0 +1,133 @@
+basePath: /api
+definitions:
+  model.Response:
+    properties:
+      message:
+        type: string
+      resultObj:
+        items:
+          $ref: '#/definitions/model.ResultObject'
+        type: array
+      statusCode:
+        type: integer
+    type: object
+  model.ResultObject:
+    properties:
+      data:
+        additionalProperties:
+          type: string
+        type: object
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a sample server celler server.
+  termsOfService: http://swagger.io/terms/
+  title: Plata backend
+  version: "1.0"
+paths:
+  /lastquotes:
+    get:
+      consumes:
+      - application/json
+      description: Get
+      parameters:
+      - description: Сurrency code
+        in: path
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Response'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: Get last quotes rate with time
+      tags:
+      - Quotes
+  /updatequotes:
+    get:
+      consumes:
+      - application/json
+      description: Get
+      parameters:
+      - description: quotes
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Response'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: Get quotes rate by id
+      tags:
+      - Quotes
+    post:
+      consumes:
+      - application/json
+      description: Update
+      parameters:
+      - description: Сurrency code
+        in: path
+        name: code
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Response'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: Update Quotes Rate
+      tags:
+      - Quotes
+swagger: "2.0"
