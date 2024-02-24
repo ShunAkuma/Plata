@@ -14,7 +14,9 @@ type QuotesUseCase interface {
 	GetLastQuotes(*gin.Context, string)
 	workerUpdater(string, *redis.Client, chan error)
 }
-type useCase struct{}
+type useCase struct{
+	rclient *redis.Client 
+}
 
 func NewUserUsecase() QuotesUseCase {
 	return &useCase{}
@@ -70,6 +72,11 @@ func (uc *useCase) UpdateQuotes(gin *gin.Context, currencyCode string) {
 // @Router       /updatequotes [get]
 func (uc *useCase) GetQuotesById(gin *gin.Context, updateId int) {
 	fmt.Println(updateId)
+	result, error := uc.rclient.Get(updateId)
+	if err != nil {
+		return err 
+}
+	return reault
 	// panic("work")
 }
 
