@@ -4,18 +4,20 @@ import (
 	"fmt"
 	"time"
 
+	"ratequotes/internal/app/usecase/externalapi"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
 )
 
 type QuotesUseCase interface {
 	UpdateQuotes(*gin.Context, string)
-	GetQuotesById(*gin.Context, int)
+	GetQuotesById(*gin.Context, int) *redis.StringCmd
 	GetLastQuotes(*gin.Context, string)
 	workerUpdater(string, *redis.Client, chan error)
 }
-type useCase struct{
-	rclient *redis.Client 
+type useCase struct {
+	rclient *redis.Client
 }
 
 func NewUserUsecase() QuotesUseCase {
@@ -70,13 +72,12 @@ func (uc *useCase) UpdateQuotes(gin *gin.Context, currencyCode string) {
 // @Failure      404  {object}  model.Response
 // @Failure      500  {object}  model.Response
 // @Router       /updatequotes [get]
-func (uc *useCase) GetQuotesById(gin *gin.Context, updateId int) {
+func (uc *useCase) GetQuotesById(gin *gin.Context, updateId int) *redis.StringCmd {
 	fmt.Println(updateId)
-	result, error := uc.rclient.Get(updateId)
-	if err != nil {
-		return err 
-}
-	return reault
+
+	result := uc.rclient.Get(fmt.Sprint(updateId))
+
+	return result
 	// panic("work")
 }
 
@@ -98,6 +99,10 @@ func (uc *useCase) GetLastQuotes(gin *gin.Context, currencyCode string) {
 }
 
 func (uc *useCase) workerUpdater(currencyCode string, rclient *redis.Client, ch chan error) {
+	// var err error
+	exApiClient := externalapi.NewClient()
+	exApiClient.ExternalRequest("EUR")
+
 	time.Sleep(5 * time.Second)
 	ch <- fmt.Errorf("error")
 }

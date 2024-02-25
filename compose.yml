@@ -1,8 +1,27 @@
+version: '3.8'
 services:
   backend:
     build: .
     ports:
       - "8080:8080"
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOST: localhost
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+      API_KEY: 13817027ad4543c5a6b384809943f699
+      EXTERNAL_API_URL: http://api.frankfurter.app/
+    links:
+      - redis
   redis:
       image: "redis:alpine"
+      restart: always 
       container_name: redis
+      ports:
+        - '6379:6379'
+      command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+
+# volumes:
+#   reids:
+#     driver: local

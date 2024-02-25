@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"errors"
+	"os"
 
 	"github.com/go-redis/redis"
 )
@@ -16,9 +17,9 @@ import (
 func NewClient() (*redis.Client, error) {
 
 	client := redis.NewClient(&redis.Options{
-		Addr:       "localhost:6379",
-		Password:   "", // no password set
-		DB:         0,  // use default DB
+		Addr:       os.Getenv("REDIS_HOST") + ":" + os.Getenv("REDIS_PORT"),
+		Password:   os.Getenv("REDIS_PASSWORD"), // no password set
+		DB:         0,                           // use default DB
 		MaxRetries: 3,
 	})
 
