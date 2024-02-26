@@ -24,18 +24,6 @@ func NewUserUsecase() QuotesUseCase {
 	return &useCase{}
 }
 
-// UdapteQuotesRate godoc
-// @Summary      Update Quotes Rate
-// @Description  Update
-// @Tags         Quotes
-// @Accept       json
-// @Produce      json
-// @Param        code   path      int  true  "Сurrency code"
-// @Success      200  {array}   model.Response
-// @Failure      400  {object}  model.Response
-// @Failure      404  {object}  model.Response
-// @Failure      500  {object}  model.Response
-// @Router       /updatequotes [post]
 func (uc *useCase) UpdateQuotes(gin *gin.Context, currencyCode string) {
 	//!! Логика
 	// TODO
@@ -60,18 +48,6 @@ func (uc *useCase) UpdateQuotes(gin *gin.Context, currencyCode string) {
 
 }
 
-// GetQuotesById godoc
-// @Summary      Get quotes rate by id
-// @Description  Get
-// @Tags         Quotes
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "quotes"
-// @Success      200  {array}   model.Response
-// @Failure      400  {object}  model.Response
-// @Failure      404  {object}  model.Response
-// @Failure      500  {object}  model.Response
-// @Router       /updatequotes [get]
 func (uc *useCase) GetQuotesById(gin *gin.Context, updateId int) *redis.StringCmd {
 	fmt.Println(updateId)
 
@@ -81,18 +57,6 @@ func (uc *useCase) GetQuotesById(gin *gin.Context, updateId int) *redis.StringCm
 	// panic("work")
 }
 
-// GetLastQuotes godoc
-// @Summary      Get last quotes rate with time
-// @Description  Get
-// @Tags         Quotes
-// @Accept       json
-// @Produce      json
-// @Param        code   path      string  true  "Сurrency code"
-// @Success      200  {array}   model.Response
-// @Failure      400  {object}  model.Response
-// @Failure      404  {object}  model.Response
-// @Failure      500  {object}  model.Response
-// @Router       /lastquotes [get]
 func (uc *useCase) GetLastQuotes(gin *gin.Context, currencyCode string) {
 	fmt.Println(currencyCode)
 	// panic("work")

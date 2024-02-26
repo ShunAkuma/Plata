@@ -1,64 +1,29 @@
 package handler
 
 import (
-	"net/http"
+	"ratequotes/internal/app/adapter"
 	"ratequotes/internal/app/usecase"
 
 	"github.com/gin-gonic/gin"
 
 	_ "ratequotes/docs"
 
-	"ratequotes/internal/app/model"
+	"ratequotes/internal/app/controller"
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func Handler(router *gin.RouterGroup) {
-	quotesUseCase := usecase.NewUserUsecase()
-
+func Handler(router *gin.RouterGroup, quotesUseCase usecase.QuotesUseCase, quotesRepos adapter.QuotesRepository, facadeRepos adapter.ExternalApiRepository) {
+	quotesController := controller.NewController()
 	router.POST("/updatequotes", func(ctx *gin.Context) {
-		var currencyCode string
-
-		if ctx.Query("CurrencyCode") == "" {
-			ctx.JSON(http.StatusBadRequest, model.Response{StatusCode: 400, Message: "Error: not enough input parameters", ResultObj: nil})
-			return
-		}
-		if err := ctx.ShouldBindQuery(&currencyCode); err != nil {
-			ctx.JSON(http.StatusBadRequest, model.Response{StatusCode: 400, Message: "Error: bind value", ResultObj: nil})
-			return
-		}
-		// !! Return update ID (maybe UUID)
-		quotesUseCase.UpdateQuotes(ctx, currencyCode)
+		quotesController.UpdateQuotesContolller(ctx, quotesUseCase, quotesRepos, facadeRepos)
 	})
-
 	router.GET("/quotesbyid", func(ctx *gin.Context) {
-		var updateId int
-
-		if ctx.Query("UpdateId") == "" {
-			ctx.JSON(http.StatusBadRequest, model.Response{StatusCode: 400, Message: "Error: not enough input parameters", ResultObj: nil})
-			return
-		}
-		if err := ctx.ShouldBindQuery(&updateId); err != nil {
-			ctx.JSON(http.StatusBadRequest, model.Response{StatusCode: 400, Message: "Error: bind value", ResultObj: nil})
-			return
-		}
-
-		quotesUseCase.GetQuotesById(ctx, updateId)
+		quotesController.GetQuotes(ctx, quotesUseCase, quotesRepos)
 	})
 	router.GET("/lastquotes", func(ctx *gin.Context) {
-		var currencyCode string
-
-		if ctx.Query("CurrencyCode") == "" {
-			ctx.JSON(http.StatusBadRequest, model.Response{StatusCode: 400, Message: "Error: not enough input parameters", ResultObj: nil})
-			return
-		}
-		if err := ctx.ShouldBindQuery(&currencyCode); err != nil {
-			ctx.JSON(http.StatusBadRequest, model.Response{StatusCode: 400, Message: "Error: bind value", ResultObj: nil})
-			return
-		}
-
-		quotesUseCase.GetLastQuotes(ctx, currencyCode)
+		quotesController.GetLastQuotes(ctx, quotesUseCase, quotesRepos)
 	})
 
 	//Swagger
