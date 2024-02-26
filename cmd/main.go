@@ -1,8 +1,12 @@
 package main
 
 import (
-	"log"
+	"fmt"
+	"net/http"
+	"ratequotes/internal/app/adapter"
 	"ratequotes/internal/app/handler"
+	"ratequotes/internal/app/usecase"
+	"ratequotes/pkg"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -19,32 +23,21 @@ func main() {
 
 }
 
-func Logger() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		t := time.Now()
-
-		// Set example variable
-		c.Set("example", "12345")
-
-		// before request
-
-		c.Next()
-
-		// after request
-		latency := time.Since(t)
-		log.Print(latency)
-
-		// access the status we are sending
-		status := c.Writer.Status()
-		log.Println(status)
-	}
-}
-
 func init() {
 
+	httpClient := http.Client{
+		Timeout: 5 * time.Second,
+	}
+
+	quotesUseCase := usecase.NewUserUsecase()
+	rclient, err := pkg.NewClient()
+	if err != nil {
+		fmt.Errorf("Error redis connection", err)
+	}
+	facadeRepos := adapter.NewFacadeApi(&httpClient)
+	quotesRepository := adapter.NewQuotesRepository(rclient)
 	router := gin.Default()
-	router.Use(Logger())
-	handler.Handler(&router.RouterGroup)
+	handler.Handler(&router.RouterGroup, quotesUseCase, quotesRepository, facadeRepos)
 
 	router.Run()
 }
