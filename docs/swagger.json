@@ -1,9 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample server celler server.",
+        "description": "Quotation server",
         "title": "Plata backend",
-        "termsOfService": "http://swagger.io/terms/",
         "contact": {},
         "version": "1.0"
     },
@@ -175,9 +174,12 @@
             "type": "object",
             "properties": {
                 "message": {
+                    "description": "Message from server\nexample: \"Something went wrong\"",
                     "type": "string"
                 },
-                "resultObj": {}
+                "resultObj": {
+                    "description": "Response model that can store an error or response"
+                }
             }
         }
     }

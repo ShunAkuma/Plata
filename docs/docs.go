@@ -9,7 +9,6 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
         "contact": {},
         "version": "{{.Version}}"
     },
@@ -181,9 +180,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "message": {
+                    "description": "Message from server\nexample: \"Something went wrong\"",
                     "type": "string"
                 },
-                "resultObj": {}
+                "resultObj": {
+                    "description": "Response model that can store an error or response"
+                }
             }
         }
     }
@@ -196,7 +198,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Plata backend",
-	Description:      "This is a sample server celler server.",
+	Description:      "Quotation server",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

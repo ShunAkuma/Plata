@@ -3,14 +3,17 @@ definitions:
   model.Response:
     properties:
       message:
+        description: |-
+          Message from server
+          example: "Something went wrong"
         type: string
-      resultObj: {}
+      resultObj:
+        description: Response model that can store an error or response
     type: object
 host: localhost:8080
 info:
   contact: {}
-  description: This is a sample server celler server.
-  termsOfService: http://swagger.io/terms/
+  description: Quotation server
   title: Plata backend
   version: "1.0"
 paths:
