@@ -50,7 +50,10 @@ or
 make start
 
 ```
-Possible errors:
+
+If the project started successfully ->  [swagger UI](http://localhost:8080/swagger/index.html)
+
+### Possible errors:
 1 - permission denied redis.log
 If you receive this error, you must do the following
 ```
@@ -61,7 +64,7 @@ chmod 777 redis.log
 ## ⛏️ Built Using <a name = "built_using"></a>
 
 - [Redis](https://redis.io/docs/connect/clients/go/) - Database
-- [Express](https://github.com/gin-gonic/gin) - Web Framework
+- [GIN](https://github.com/gin-gonic/gin) - Web Framework
 - [Docker] - Containerization
 
 ## ✍️ Authors <a name = "authors"></a>
