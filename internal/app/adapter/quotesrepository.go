@@ -27,14 +27,13 @@ func NewQuotesRepository(rclient *redis.Client) QuotesRepository {
 func (rc QuotesRedisRepository) SetQuotes(exchangeRates model.Quotes, id string) error {
 	data, err := json.Marshal(exchangeRates)
 	if err != nil {
-		log.Panicln(err)
+		log.Println("Error parsing data", err)
 		return err
 	}
 	statusCmd := rc.redis.Set(id, data, 0)
 	if statusCmd.Err() != nil {
 		log.Println("Ошибка при установке значения в Redis:", statusCmd.Err())
 		return err
-		// Дополнительная обработка ошибки здесь, если необходимо
 	} else {
 		log.Println("Значение успешно установлено в Redis.")
 	}

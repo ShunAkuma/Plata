@@ -5,12 +5,11 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-    #   # - db
+
       - redis
     environment:
-      REDIS_HOST: localhost
       REDIS_PORT: 6379
-      # REDIS_PASSWORD: eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+      REDIS_PAS: admin
       EXTERNAL_API_URL: https://api.vatcomply.com/rates
   redis:
       image: "redis:latest"
@@ -22,17 +21,4 @@ services:
         - ./redis.log:/shared/redis.log
         - ./redis.conf:/shared/redis.conf
       command: ["redis-server", "/shared/redis.conf", "--logfile", "/shared/redis.log"] 
-#   db:
-#     image: "postgres:latest"
-#     restart: always
-#     ports:
-#       - 5435:5435
-#     volumes:
-#       - postgres_data:/var/lib/postgresql/data
-#     environment:
-#       - POSTGRES_PASSWORD=postgres
-#       - POSTGRES_USER=postgres
-#       - POSTGRES_DB=platadb
 
-# volumes:
-#   postgres_data:
