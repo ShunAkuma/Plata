@@ -14,8 +14,7 @@ import (
 
 // @title           Plata backend
 // @version         1.0
-// @description     This is a sample server celler server.
-// @termsOfService  http://swagger.io/terms/
+// @description     Quotation server
 
 // @host      localhost:8080
 // @BasePath  /
