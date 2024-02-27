@@ -28,11 +28,11 @@ func NewController(symbolsMap map[string]bool) controller {
 
 // UdapteQuotesRate godoc
 // @Summary      Update Quotes Rate
-// @Description  Update
+// @Description  Updating the quote in the background
 // @Tags         Quotes
 // @Accept       json
 // @Produce      json
-// @Param        code   path      int  true  "Сurrency code"
+// @Param        CurrencyCode   query      string  true  "Сurrency code"
 // @Success      200  {array}   model.Response
 // @Failure      400  {object}  model.Response
 // @Failure      404  {object}  model.Response
@@ -66,16 +66,16 @@ func (c QuotesController) UpdateQuotesContolller(ctx *gin.Context, quotesUseCase
 
 // GetQuotesById godoc
 // @Summary      Get quotes rate by id
-// @Description  Get
+// @Description  Get Get quotes rate by id from redis
 // @Tags         Quotes
 // @Accept       json
 // @Produce      json
-// @Param        id   path      int  true  "quotes"
+// @Param        UpdateId   query      string  true  "quotes"
 // @Success      200  {array}   model.Response
 // @Failure      400  {object}  model.Response
 // @Failure      404  {object}  model.Response
 // @Failure      500  {object}  model.Response
-// @Router       /updatequotes [get]
+// @Router       /quotesbyid [get]
 func (c QuotesController) GetQuotes(ctx *gin.Context, quotesUseCase usecase.QuotesUseCase, quotesRepos adapter.QuotesRepository) {
 
 	var updateId string = ctx.Query("UpdateId")
@@ -102,27 +102,38 @@ func (c QuotesController) GetQuotes(ctx *gin.Context, quotesUseCase usecase.Quot
 
 // GetLastQuotes godoc
 // @Summary      Get last quotes rate with time
-// @Description  Get
+// @Description  Get last quotes with time and rate
 // @Tags         Quotes
 // @Accept       json
 // @Produce      json
-// @Param        code   path      string  true  "Сurrency code"
+// @Param        CurrencyCode   query      string  true  "Сurrency code"
 // @Success      200  {array}   model.Response
 // @Failure      400  {object}  model.Response
 // @Failure      404  {object}  model.Response
 // @Failure      500  {object}  model.Response
 // @Router       /lastquotes [get]
 func (c QuotesController) GetLastQuotes(ctx *gin.Context, quotesUseCase usecase.QuotesUseCase, quotesRepos adapter.QuotesRepository) {
-	var currencyCode string
-
-	if ctx.Query("CurrencyCode") == "" {
+	currencyCode := ctx.Query("CurrencyCode")
+	if currencyCode == "" {
 		ctx.JSON(http.StatusBadRequest, model.Response{Message: "Error: not enough input parameters", ResultObj: nil})
 		return
 	}
+
 	if err := ctx.ShouldBindQuery(&currencyCode); err != nil {
 		ctx.JSON(http.StatusBadRequest, model.Response{Message: "Error: bind value", ResultObj: nil})
 		return
 	}
 
-	quotesUseCase.GetLastQuotes(ctx, currencyCode)
+	if _, ok := c.symbols[currencyCode]; !ok {
+		ctx.JSON(http.StatusBadRequest, model.Response{Message: "Bad currency code", ResultObj: nil})
+		return
+	}
+
+	err, quotes := quotesUseCase.GetLastQuotes(ctx, currencyCode, quotesRepos)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, model.Response{Message: "Something went wrong", ResultObj: err})
+		return
+	}
+	ctx.JSON(http.StatusOK, model.Response{Message: "Data", ResultObj: quotes})
+	return
 }

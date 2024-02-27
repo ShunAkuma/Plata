@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"fmt"
 	"log"
 	"ratequotes/internal/app/adapter"
 	"ratequotes/internal/app/model"
@@ -14,7 +13,7 @@ import (
 type QuotesUseCase interface {
 	UpdateQuotes(*gin.Context, string, string, adapter.QuotesRepository, adapter.ExternalApiRepository)
 	GetQuotesById(*gin.Context, string, adapter.QuotesRepository) (error, model.ResponseQuotesModel)
-	GetLastQuotes(*gin.Context, string)
+	GetLastQuotes(*gin.Context, string, adapter.QuotesRepository) (error, model.Quotes)
 }
 type useCase struct {
 	rclient *redis.Client
@@ -62,7 +61,18 @@ func (uc *useCase) GetQuotesById(gin *gin.Context, updateId string, quotesRepos 
 
 }
 
-func (uc *useCase) GetLastQuotes(gin *gin.Context, currencyCode string) {
-	fmt.Println(currencyCode)
-	// panic("work")
+func (uc *useCase) GetLastQuotes(gin *gin.Context, currencyCode string, quotesRepos adapter.QuotesRepository) (error, model.Quotes) {
+	err, id := quotesRepos.GetQuotesBySymbol(currencyCode)
+	if err != nil {
+		return err, model.Quotes{}
+	}
+
+	err, quotesModel := quotesRepos.GetQuotesById(id)
+
+	if err != nil {
+		log.Println(err)
+		return err, model.Quotes{}
+	}
+
+	return nil, quotesModel
 }

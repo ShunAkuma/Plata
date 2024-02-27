@@ -18,7 +18,7 @@ const docTemplate = `{
     "paths": {
         "/lastquotes": {
             "get": {
-                "description": "Get",
+                "description": "Get last quotes with time and rate",
                 "consumes": [
                     "application/json"
                 ],
@@ -33,8 +33,61 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Сurrency code",
-                        "name": "code",
-                        "in": "path",
+                        "name": "CurrencyCode",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Response"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/quotesbyid": {
+            "get": {
+                "description": "Get Get quotes rate by id from redis",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Quotes"
+                ],
+                "summary": "Get quotes rate by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "quotes",
+                        "name": "UpdateId",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -70,59 +123,8 @@ const docTemplate = `{
             }
         },
         "/updatequotes": {
-            "get": {
-                "description": "Get",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Quotes"
-                ],
-                "summary": "Get quotes rate by id",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "quotes",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/model.Response"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/model.Response"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/model.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/model.Response"
-                        }
-                    }
-                }
-            },
             "post": {
-                "description": "Update",
+                "description": "Updating the quote in the background",
                 "consumes": [
                     "application/json"
                 ],
@@ -135,10 +137,10 @@ const docTemplate = `{
                 "summary": "Update Quotes Rate",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "Сurrency code",
-                        "name": "code",
-                        "in": "path",
+                        "name": "CurrencyCode",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -191,7 +193,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "localhost:8080",
-	BasePath:         "/api",
+	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Plata backend",
 	Description:      "This is a sample server celler server.",

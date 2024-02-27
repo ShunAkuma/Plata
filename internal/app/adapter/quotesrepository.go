@@ -12,6 +12,7 @@ import (
 type QuotesRepository interface {
 	SetQuotes(model.Quotes, string) error
 	GetQuotesById(string) (error, model.Quotes)
+	GetQuotesBySymbol(string) (error, string)
 }
 type QuotesRedisRepository struct {
 	redis *redis.Client
@@ -37,6 +38,7 @@ func (rc QuotesRedisRepository) SetQuotes(exchangeRates model.Quotes, id string)
 	} else {
 		log.Println("Значение успешно установлено в Redis.")
 	}
+	rc.redis.Set(exchangeRates.Base, id, 0)
 
 	return nil
 
@@ -63,4 +65,19 @@ func (rc QuotesRedisRepository) GetQuotesById(updateId string) (error, model.Quo
 
 	return nil, quotes
 
+}
+
+func (rc QuotesRedisRepository) GetQuotesBySymbol(currencyCode string) (error, string) {
+	result, err := rc.redis.Get(currencyCode).Result()
+	if err != nil {
+		log.Println(err)
+		return err, ""
+	}
+	if result == "" {
+		err = errors.New("No data in Redis with this key")
+		log.Println("No data in Redis with this key")
+		return err, ""
+	}
+
+	return nil, result
 }

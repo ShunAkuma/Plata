@@ -1,4 +1,4 @@
-basePath: /api
+basePath: /
 definitions:
   model.Response:
     properties:
@@ -18,11 +18,11 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get
+      description: Get last quotes with time and rate
       parameters:
       - description: Сurrency code
-        in: path
-        name: code
+        in: query
+        name: CurrencyCode
         required: true
         type: string
       produces:
@@ -49,17 +49,17 @@ paths:
       summary: Get last quotes rate with time
       tags:
       - Quotes
-  /updatequotes:
+  /quotesbyid:
     get:
       consumes:
       - application/json
-      description: Get
+      description: Get Get quotes rate by id from redis
       parameters:
       - description: quotes
-        in: path
-        name: id
+        in: query
+        name: UpdateId
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -84,16 +84,17 @@ paths:
       summary: Get quotes rate by id
       tags:
       - Quotes
+  /updatequotes:
     post:
       consumes:
       - application/json
-      description: Update
+      description: Updating the quote in the background
       parameters:
       - description: Сurrency code
-        in: path
-        name: code
+        in: query
+        name: CurrencyCode
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:

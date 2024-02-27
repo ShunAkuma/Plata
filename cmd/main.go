@@ -18,7 +18,7 @@ import (
 // @termsOfService  http://swagger.io/terms/
 
 // @host      localhost:8080
-// @BasePath  /api
+// @BasePath  /
 func main() {
 
 	httpClient := http.Client{
