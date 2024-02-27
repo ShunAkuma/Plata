@@ -34,9 +34,7 @@ func NewController(symbolsMap map[string]bool) controller {
 // @Produce      json
 // @Param        CurrencyCode   query      string  true  "Сurrency code"
 // @Success      200  {array}   model.Response
-// @Failure      400  {object}  model.Response
-// @Failure      404  {object}  model.Response
-// @Failure      500  {object}  model.Response
+// @Failure      400,404  {object}  model.Response
 // @Router       /updatequotes [post]
 func (c QuotesController) UpdateQuotesContolller(ctx *gin.Context, quotesUseCase usecase.QuotesUseCase, quotesRepos adapter.QuotesRepository, facadeRep adapter.ExternalApiRepository) {
 	var currencyCode string = ctx.Query("CurrencyCode")
@@ -72,9 +70,7 @@ func (c QuotesController) UpdateQuotesContolller(ctx *gin.Context, quotesUseCase
 // @Produce      json
 // @Param        UpdateId   query      string  true  "quotes"
 // @Success      200  {array}   model.Response
-// @Failure      400  {object}  model.Response
-// @Failure      404  {object}  model.Response
-// @Failure      500  {object}  model.Response
+// @Failure      400,404  {object}  model.Response
 // @Router       /quotesbyid [get]
 func (c QuotesController) GetQuotes(ctx *gin.Context, quotesUseCase usecase.QuotesUseCase, quotesRepos adapter.QuotesRepository) {
 
@@ -108,9 +104,7 @@ func (c QuotesController) GetQuotes(ctx *gin.Context, quotesUseCase usecase.Quot
 // @Produce      json
 // @Param        CurrencyCode   query      string  true  "Сurrency code"
 // @Success      200  {array}   model.Response
-// @Failure      400  {object}  model.Response
-// @Failure      404  {object}  model.Response
-// @Failure      500  {object}  model.Response
+// @Failure      400,404  {object}  model.Response
 // @Router       /lastquotes [get]
 func (c QuotesController) GetLastQuotes(ctx *gin.Context, quotesUseCase usecase.QuotesUseCase, quotesRepos adapter.QuotesRepository) {
 	currencyCode := ctx.Query("CurrencyCode")
