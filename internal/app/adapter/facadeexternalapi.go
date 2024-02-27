@@ -27,7 +27,6 @@ func (fa FacadeApiRepository) GetCurrencyRate(currencyCode string) (error, model
 	var exchangeRates model.ExchangeRatesResponse
 
 	baseURL := os.Getenv("EXTERNAL_API_URL")
-	// baseURL := "https://api.vatcomply.com/rates"
 	params := url.Values{}
 	params.Set("base", currencyCode)
 

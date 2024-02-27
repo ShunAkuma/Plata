@@ -7,25 +7,28 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis"
 )
 
 type QuotesUseCase interface {
-	UpdateQuotes(*gin.Context, string, string, adapter.QuotesRepository, adapter.ExternalApiRepository)
-	GetQuotesById(*gin.Context, string, adapter.QuotesRepository) (error, model.ResponseQuotesModel)
-	GetLastQuotes(*gin.Context, string, adapter.QuotesRepository) (error, model.Quotes)
+	UpdateQuotes(*gin.Context, string, string)
+	GetQuotesById(*gin.Context, string) (error, model.ResponseQuotesModel)
+	GetLastQuotes(*gin.Context, string) (error, model.Quotes)
 }
 type useCase struct {
-	rclient *redis.Client
+	quotesRepos adapter.QuotesRepository
+	facadeRep   adapter.ExternalApiRepository
 }
 
-func NewUserUsecase() QuotesUseCase {
-	return &useCase{}
+func NewUserUsecase(q adapter.QuotesRepository, f adapter.ExternalApiRepository) QuotesUseCase {
+	return &useCase{
+		quotesRepos: q,
+		facadeRep:   f,
+	}
 }
 
-func (uc *useCase) UpdateQuotes(gin *gin.Context, currencyCode string, id string, quotesRepos adapter.QuotesRepository, facadeRep adapter.ExternalApiRepository) {
+func (uc *useCase) UpdateQuotes(gin *gin.Context, currencyCode string, id string) {
 
-	err, exexchangeRatesResponse := facadeRep.GetCurrencyRate(currencyCode)
+	err, exexchangeRatesResponse := uc.facadeRep.GetCurrencyRate(currencyCode)
 	if err != nil {
 		log.Println("Error: external request")
 		return
@@ -37,7 +40,7 @@ func (uc *useCase) UpdateQuotes(gin *gin.Context, currencyCode string, id string
 		Rates:      exexchangeRatesResponse.Rates,
 	}
 
-	err = quotesRepos.SetQuotes(quotesModel, id)
+	err = uc.quotesRepos.SetQuotes(quotesModel, id)
 	if err != nil {
 		log.Println(err)
 	}
@@ -46,10 +49,10 @@ func (uc *useCase) UpdateQuotes(gin *gin.Context, currencyCode string, id string
 
 }
 
-func (uc *useCase) GetQuotesById(gin *gin.Context, updateId string, quotesRepos adapter.QuotesRepository) (error, model.ResponseQuotesModel) {
+func (uc *useCase) GetQuotesById(gin *gin.Context, updateId string) (error, model.ResponseQuotesModel) {
 	var model model.ResponseQuotesModel
 
-	err, quotesData := quotesRepos.GetQuotesById(updateId)
+	err, quotesData := uc.quotesRepos.GetQuotesById(updateId)
 	if err != nil {
 		return err, model
 	}
@@ -61,13 +64,13 @@ func (uc *useCase) GetQuotesById(gin *gin.Context, updateId string, quotesRepos 
 
 }
 
-func (uc *useCase) GetLastQuotes(gin *gin.Context, currencyCode string, quotesRepos adapter.QuotesRepository) (error, model.Quotes) {
-	err, id := quotesRepos.GetQuotesBySymbol(currencyCode)
+func (uc *useCase) GetLastQuotes(gin *gin.Context, currencyCode string) (error, model.Quotes) {
+	err, id := uc.quotesRepos.GetQuotesBySymbol(currencyCode)
 	if err != nil {
 		return err, model.Quotes{}
 	}
 
-	err, quotesModel := quotesRepos.GetQuotesById(id)
+	err, quotesModel := uc.quotesRepos.GetQuotesById(id)
 
 	if err != nil {
 		log.Println(err)

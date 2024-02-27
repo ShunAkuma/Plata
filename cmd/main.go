@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"ratequotes/internal/app/adapter"
+	"ratequotes/internal/app/controller"
 	"ratequotes/internal/app/handler"
 	"ratequotes/internal/app/usecase"
 	"ratequotes/pkg"
@@ -29,16 +30,20 @@ func main() {
 		"USD": true,
 		"RUB": true,
 	}
-
-	quotesUseCase := usecase.NewUserUsecase()
 	rclient, err := pkg.NewClient()
+	facadeRepos := adapter.NewFacadeApi(&httpClient)
+	quotesRepository := adapter.NewQuotesRepository(rclient)
+	quotesUseCase := usecase.NewUserUsecase(quotesRepository, facadeRepos)
+	quotesController := controller.NewController(symbols, quotesUseCase)
+
 	if err != nil {
 		log.Println("Error redis connection", err)
 	}
-	facadeRepos := adapter.NewFacadeApi(&httpClient)
-	quotesRepository := adapter.NewQuotesRepository(rclient)
+
 	router := gin.Default()
-	handler.Handler(&router.RouterGroup, quotesUseCase, quotesRepository, facadeRepos, symbols)
+
+	handler := handler.NewHandler(quotesController)
+	handler.Handler(&router.RouterGroup)
 
 	router.Run()
 }

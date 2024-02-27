@@ -32,10 +32,10 @@ func (rc QuotesRedisRepository) SetQuotes(exchangeRates model.Quotes, id string)
 	}
 	statusCmd := rc.redis.Set(id, data, 0)
 	if statusCmd.Err() != nil {
-		log.Println("Ошибка при установке значения в Redis:", statusCmd.Err())
+		log.Println("Error setting value in Redis:", statusCmd.Err())
 		return err
 	} else {
-		log.Println("Значение успешно установлено в Redis.")
+		log.Println("The value was successfully set in Redis.")
 	}
 	rc.redis.Set(exchangeRates.Base, id, 0)
 
@@ -58,7 +58,7 @@ func (rc QuotesRedisRepository) GetQuotesById(updateId string) (error, model.Quo
 	var quotes model.Quotes
 	err = json.Unmarshal([]byte(result), &quotes)
 	if err != nil {
-		log.Println("Ошибка при декодировании данных из Redis:", err)
+		log.Println("Error decoding data from Redis:", err)
 		return err, model.Quotes{}
 	}
 

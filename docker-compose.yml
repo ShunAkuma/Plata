@@ -18,7 +18,6 @@ services:
       ports:
         - "6379:6379"
       volumes:
-        - ./redis.log:/shared/redis.log
         - ./redis.conf:/shared/redis.conf
-      command: ["redis-server", "/shared/redis.conf", "--logfile", "/shared/redis.log"] 
+      command: ["redis-server", "/shared/redis.conf"] 
 

@@ -4,7 +4,6 @@ WORKDIR /app
 
 
 COPY redis.conf /shared/redis.conf
-COPY redis.log /shared/redis.conf
 COPY . .
  
 RUN go mod download

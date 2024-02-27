@@ -2,7 +2,6 @@ package controller
 
 import (
 	"net/http"
-	"ratequotes/internal/app/adapter"
 	"ratequotes/internal/app/model"
 	"ratequotes/internal/app/usecase"
 
@@ -10,19 +9,21 @@ import (
 	"github.com/google/uuid"
 )
 
-type controller interface {
-	UpdateQuotesContolller(*gin.Context, usecase.QuotesUseCase, adapter.QuotesRepository, adapter.ExternalApiRepository)
-	GetQuotes(*gin.Context, usecase.QuotesUseCase, adapter.QuotesRepository)
-	GetLastQuotes(*gin.Context, usecase.QuotesUseCase, adapter.QuotesRepository)
+type Controller interface {
+	UpdateQuotesContolller(*gin.Context)
+	GetQuotes(*gin.Context)
+	GetLastQuotes(*gin.Context)
 }
 
 type QuotesController struct {
-	symbols map[string]bool
+	symbols       map[string]bool
+	quotesUseCase usecase.QuotesUseCase
 }
 
-func NewController(symbolsMap map[string]bool) controller {
+func NewController(symbolsMap map[string]bool, quotesUseCase usecase.QuotesUseCase) Controller {
 	return &QuotesController{
-		symbols: symbolsMap,
+		symbols:       symbolsMap,
+		quotesUseCase: quotesUseCase,
 	}
 }
 
@@ -36,7 +37,7 @@ func NewController(symbolsMap map[string]bool) controller {
 // @Success      200  {array}   model.Response
 // @Failure      400,404  {object}  model.Response
 // @Router       /updatequotes [post]
-func (c QuotesController) UpdateQuotesContolller(ctx *gin.Context, quotesUseCase usecase.QuotesUseCase, quotesRepos adapter.QuotesRepository, facadeRep adapter.ExternalApiRepository) {
+func (c QuotesController) UpdateQuotesContolller(ctx *gin.Context) {
 	var currencyCode string = ctx.Query("CurrencyCode")
 
 	if currencyCode == "" {
@@ -56,7 +57,7 @@ func (c QuotesController) UpdateQuotesContolller(ctx *gin.Context, quotesUseCase
 
 	requestId := uuid.New()
 
-	go quotesUseCase.UpdateQuotes(ctx, currencyCode, requestId.String(), quotesRepos, facadeRep)
+	go c.quotesUseCase.UpdateQuotes(ctx, currencyCode, requestId.String())
 
 	ctx.JSON(http.StatusOK, model.Response{Message: "Request Id", ResultObj: requestId})
 	return
@@ -72,7 +73,7 @@ func (c QuotesController) UpdateQuotesContolller(ctx *gin.Context, quotesUseCase
 // @Success      200  {array}   model.Response
 // @Failure      400,404  {object}  model.Response
 // @Router       /quotesbyid [get]
-func (c QuotesController) GetQuotes(ctx *gin.Context, quotesUseCase usecase.QuotesUseCase, quotesRepos adapter.QuotesRepository) {
+func (c QuotesController) GetQuotes(ctx *gin.Context) {
 
 	var updateId string = ctx.Query("UpdateId")
 
@@ -86,7 +87,7 @@ func (c QuotesController) GetQuotes(ctx *gin.Context, quotesUseCase usecase.Quot
 		return
 	}
 
-	err, quotesResponse := quotesUseCase.GetQuotesById(ctx, updateId, quotesRepos)
+	err, quotesResponse := c.quotesUseCase.GetQuotesById(ctx, updateId)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, model.Response{Message: "Something went wrong", ResultObj: err})
 		return
@@ -106,7 +107,7 @@ func (c QuotesController) GetQuotes(ctx *gin.Context, quotesUseCase usecase.Quot
 // @Success      200  {array}   model.Response
 // @Failure      400,404  {object}  model.Response
 // @Router       /lastquotes [get]
-func (c QuotesController) GetLastQuotes(ctx *gin.Context, quotesUseCase usecase.QuotesUseCase, quotesRepos adapter.QuotesRepository) {
+func (c QuotesController) GetLastQuotes(ctx *gin.Context) {
 	currencyCode := ctx.Query("CurrencyCode")
 	if currencyCode == "" {
 		ctx.JSON(http.StatusBadRequest, model.Response{Message: "Error: not enough input parameters", ResultObj: nil})
@@ -123,7 +124,7 @@ func (c QuotesController) GetLastQuotes(ctx *gin.Context, quotesUseCase usecase.
 		return
 	}
 
-	err, quotes := quotesUseCase.GetLastQuotes(ctx, currencyCode, quotesRepos)
+	err, quotes := c.quotesUseCase.GetLastQuotes(ctx, currencyCode)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, model.Response{Message: "Something went wrong", ResultObj: err})
 		return
