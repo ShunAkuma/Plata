@@ -16,6 +16,7 @@ import (
 
 func Handler(router *gin.RouterGroup, quotesUseCase usecase.QuotesUseCase, quotesRepos adapter.QuotesRepository, facadeRepos adapter.ExternalApiRepository, symbolsMap map[string]bool) {
 	quotesController := controller.NewController(symbolsMap)
+
 	router.POST("/updatequotes", func(ctx *gin.Context) {
 		quotesController.UpdateQuotesContolller(ctx, quotesUseCase, quotesRepos, facadeRepos)
 	})

@@ -1,7 +1,6 @@
 package adapter
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -10,7 +9,7 @@ import (
 )
 
 type ExternalApiRepository interface {
-	GetCurrencyRate(ctx context.Context, currencyCode string) (error, model.ExchangeRatesResponse)
+	GetCurrencyRate(currencyCode string) (error, model.ExchangeRatesResponse)
 }
 
 type FacadeApiRepository struct {
@@ -23,7 +22,7 @@ func NewFacadeApi(httpClient *http.Client) ExternalApiRepository {
 	}
 }
 
-func (fa FacadeApiRepository) GetCurrencyRate(ctx context.Context, currencyCode string) (error, model.ExchangeRatesResponse) {
+func (fa FacadeApiRepository) GetCurrencyRate(currencyCode string) (error, model.ExchangeRatesResponse) {
 	var exchangeRates model.ExchangeRatesResponse
 
 	// baseURL := os.Getenv("EXTERNAL_API_URL")

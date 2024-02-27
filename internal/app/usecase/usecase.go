@@ -1,10 +1,10 @@
 package usecase
 
 import (
-	"context"
 	"fmt"
+	"log"
 	"ratequotes/internal/app/adapter"
-
+	"ratequotes/internal/app/model"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +13,7 @@ import (
 
 type QuotesUseCase interface {
 	UpdateQuotes(*gin.Context, string, string, adapter.QuotesRepository, adapter.ExternalApiRepository)
-	GetQuotesById(*gin.Context, int) *redis.StringCmd
+	GetQuotesById(*gin.Context, string, adapter.QuotesRepository) (error, model.ResponseQuotesModel)
 	GetLastQuotes(*gin.Context, string)
 }
 type useCase struct {
@@ -25,26 +25,41 @@ func NewUserUsecase() QuotesUseCase {
 }
 
 func (uc *useCase) UpdateQuotes(gin *gin.Context, currencyCode string, id string, quotesRepos adapter.QuotesRepository, facadeRep adapter.ExternalApiRepository) {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 
-	defer cancel()
-
-	err, exexchangeRatesResponse := facadeRep.GetCurrencyRate(ctx, currencyCode)
-
+	err, exexchangeRatesResponse := facadeRep.GetCurrencyRate(currencyCode)
 	if err != nil {
-		panic("ERROR EXTERNAL REQUEST")
+		log.Println("Error: external request")
+		return
 	}
-	quotesRepos.SetQuotes(exexchangeRatesResponse, id)
+	quotesModel := model.Quotes{
+		Id:         id,
+		TimeUpdate: time.Now(),
+		Base:       exexchangeRatesResponse.Base,
+		Rates:      exexchangeRatesResponse.Rates,
+	}
+
+	err = quotesRepos.SetQuotes(quotesModel, id)
+	if err != nil {
+		log.Println(err)
+	}
+
+	return
 
 }
 
-func (uc *useCase) GetQuotesById(gin *gin.Context, updateId int) *redis.StringCmd {
-	fmt.Println(updateId)
+func (uc *useCase) GetQuotesById(gin *gin.Context, updateId string, quotesRepos adapter.QuotesRepository) (error, model.ResponseQuotesModel) {
+	var model model.ResponseQuotesModel
 
-	result := uc.rclient.Get(fmt.Sprint(updateId))
+	err, quotesData := quotesRepos.GetQuotesById(updateId)
+	if err != nil {
+		return err, model
+	}
+	model.TimeUpdate = quotesData.TimeUpdate
+	model.Rates = quotesData.Rates
+	model.Base = quotesData.Base
 
-	return result
-	// panic("work")
+	return nil, model
+
 }
 
 func (uc *useCase) GetLastQuotes(gin *gin.Context, currencyCode string) {

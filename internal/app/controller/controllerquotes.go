@@ -78,17 +78,26 @@ func (c QuotesController) UpdateQuotesContolller(ctx *gin.Context, quotesUseCase
 // @Router       /updatequotes [get]
 func (c QuotesController) GetQuotes(ctx *gin.Context, quotesUseCase usecase.QuotesUseCase, quotesRepos adapter.QuotesRepository) {
 
-	var updateId int
+	var updateId string = ctx.Query("UpdateId")
 
-	if ctx.Query("UpdateId") == "" {
+	if updateId == "" {
 		ctx.JSON(http.StatusBadRequest, model.Response{Message: "Error: not enough input parameters", ResultObj: nil})
 		return
 	}
+
 	if err := ctx.ShouldBindQuery(&updateId); err != nil {
 		ctx.JSON(http.StatusBadRequest, model.Response{Message: "Error: bind value", ResultObj: nil})
 		return
 	}
-	quotesUseCase.GetQuotesById(ctx, updateId)
+
+	err, quotesResponse := quotesUseCase.GetQuotesById(ctx, updateId, quotesRepos)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, model.Response{Message: "Something went wrong", ResultObj: err})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.Response{Message: "Data", ResultObj: quotesResponse})
+	return
 }
 
 // GetLastQuotes godoc

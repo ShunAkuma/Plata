@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"ratequotes/internal/app/adapter"
 	"ratequotes/internal/app/handler"
@@ -34,7 +34,7 @@ func main() {
 	quotesUseCase := usecase.NewUserUsecase()
 	rclient, err := pkg.NewClient()
 	if err != nil {
-		fmt.Errorf("Error redis connection", err)
+		log.Println("Error redis connection", err)
 	}
 	facadeRepos := adapter.NewFacadeApi(&httpClient)
 	quotesRepository := adapter.NewQuotesRepository(rclient)
