@@ -1,6 +1,7 @@
 basePath: /
 definitions:
   model.Response:
+    description: Response model from quotes server
     properties:
       message:
         description: |-
@@ -8,7 +9,9 @@ definitions:
           example: "Something went wrong"
         type: string
       resultObj:
-        description: Response model that can store an error or response
+        description: |-
+          Generalized Response Object from Server
+          Response model that can store an error or response
     type: object
 host: localhost:8080
 info:
@@ -45,10 +48,6 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/model.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/model.Response'
       summary: Get last quotes rate with time
       tags:
       - Quotes
@@ -80,10 +79,6 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/model.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/model.Response'
       summary: Get quotes rate by id
       tags:
       - Quotes
@@ -113,10 +108,6 @@ paths:
             $ref: '#/definitions/model.Response'
         "404":
           description: Not Found
-          schema:
-            $ref: '#/definitions/model.Response'
-        "500":
-          description: Internal Server Error
           schema:
             $ref: '#/definitions/model.Response'
       summary: Update Quotes Rate

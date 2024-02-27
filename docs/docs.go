@@ -58,12 +58,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/model.Response"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/model.Response"
-                        }
                     }
                 }
             }
@@ -108,12 +102,6 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/model.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/model.Response"
                         }
@@ -164,12 +152,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/model.Response"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/model.Response"
-                        }
                     }
                 }
             }
@@ -177,6 +159,7 @@ const docTemplate = `{
     },
     "definitions": {
         "model.Response": {
+            "description": "Response model from quotes server",
             "type": "object",
             "properties": {
                 "message": {
@@ -184,7 +167,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "resultObj": {
-                    "description": "Response model that can store an error or response"
+                    "description": "Generalized Response Object from Server\nResponse model that can store an error or response"
                 }
             }
         }
