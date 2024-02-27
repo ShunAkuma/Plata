@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"ratequotes/internal/app/adapter"
@@ -22,10 +21,6 @@ import (
 // @BasePath  /api
 func main() {
 
-	pool, err := pkg.NewPostgresClient()
-
-	test := pool.Ping(context.Background())
-	fmt.Println("----------------------", test, "---------------------")
 	httpClient := http.Client{
 		Timeout: 5 * time.Second,
 	}

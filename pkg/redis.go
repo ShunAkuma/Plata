@@ -16,7 +16,7 @@ import (
 func NewClient() (*redis.Client, error) {
 	// Устанавливаем соединение с Redis сервером
 	client := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
+		Addr:     "redis:6379",
 		Password: "admin", // no password set
 		DB:       0,       // use default DB
 	})
