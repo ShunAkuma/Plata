@@ -1,20 +1,20 @@
 package usecase
 
 import (
+	"context"
 	"fmt"
-	"time"
+	"ratequotes/internal/app/adapter"
 
-	"ratequotes/internal/app/usecase/externalapi"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
 )
 
 type QuotesUseCase interface {
-	UpdateQuotes(*gin.Context, string)
+	UpdateQuotes(*gin.Context, string, string, adapter.QuotesRepository, adapter.ExternalApiRepository)
 	GetQuotesById(*gin.Context, int) *redis.StringCmd
 	GetLastQuotes(*gin.Context, string)
-	workerUpdater(string, *redis.Client, chan error)
 }
 type useCase struct {
 	rclient *redis.Client
@@ -24,27 +24,17 @@ func NewUserUsecase() QuotesUseCase {
 	return &useCase{}
 }
 
-func (uc *useCase) UpdateQuotes(gin *gin.Context, currencyCode string) {
-	//!! Логика
-	// TODO
+func (uc *useCase) UpdateQuotes(gin *gin.Context, currencyCode string, id string, quotesRepos adapter.QuotesRepository, facadeRep adapter.ExternalApiRepository) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 
-	done := make(chan error)
+	defer cancel()
 
-	// Запуск "worker" в фоновом режиме
-	go uc.workerUpdater(currencyCode, &redis.Client{}, done)
+	err, exexchangeRatesResponse := facadeRep.GetCurrencyRate(ctx, currencyCode)
 
-	// Ожидание завершения работы "worker"
-	go func() {
-		err := <-done
-		if err != nil {
-			panic("=======================WORK==========================  ERROR")
-			// Обработка ошибки, например, отправка сообщения об ошибке в лог или оповещение администратора
-		} else {
-			panic("=======================WORK==========================")
-		}
-	}()
-	gin.JSON(200, "BLALALALALALALLALA")
-	return
+	if err != nil {
+		panic("ERROR EXTERNAL REQUEST")
+	}
+	quotesRepos.SetQuotes(exexchangeRatesResponse, id)
 
 }
 
@@ -60,13 +50,4 @@ func (uc *useCase) GetQuotesById(gin *gin.Context, updateId int) *redis.StringCm
 func (uc *useCase) GetLastQuotes(gin *gin.Context, currencyCode string) {
 	fmt.Println(currencyCode)
 	// panic("work")
-}
-
-func (uc *useCase) workerUpdater(currencyCode string, rclient *redis.Client, ch chan error) {
-	// var err error
-	exApiClient := externalapi.NewClient()
-	exApiClient.ExternalRequest("EUR")
-
-	time.Sleep(5 * time.Second)
-	ch <- fmt.Errorf("error")
 }

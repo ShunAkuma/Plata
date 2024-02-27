@@ -4,19 +4,7 @@ definitions:
     properties:
       message:
         type: string
-      resultObj:
-        items:
-          $ref: '#/definitions/model.ResultObject'
-        type: array
-      statusCode:
-        type: integer
-    type: object
-  model.ResultObject:
-    properties:
-      data:
-        additionalProperties:
-          type: string
-        type: object
+      resultObj: {}
     type: object
 host: localhost:8080
 info:

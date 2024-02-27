@@ -1,0 +1,95 @@
+1:C 26 Feb 2024 21:42:09.105 * oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1:C 26 Feb 2024 21:42:09.105 * Redis version=7.2.4, bits=64, commit=00000000, modified=0, pid=1, just started
+1:C 26 Feb 2024 21:42:09.105 * Configuration loaded
+1:M 26 Feb 2024 21:42:09.106 * monotonic clock: POSIX clock_gettime
+1:M 26 Feb 2024 21:42:09.108 * Running mode=standalone, port=6379.
+1:M 26 Feb 2024 21:42:09.110 * Server initialized
+1:M 26 Feb 2024 21:42:09.114 * Ready to accept connections tcp
+1:M 26 Feb 2024 21:43:44.403 - Accepted 192.168.65.1:36841
+1:M 26 Feb 2024 21:43:44.415 - Client closed connection id=3 addr=192.168.65.1:36841 laddr=172.22.0.2:6379 fd=7 name= age=0 idle=0 flags=N db=0 sub=0 psub=0 ssub=0 multi=-1 qbuf=0 qbuf-free=20474 argv-mem=0 multi-mem=0 rbs=16384 rbp=16384 obl=0 oll=0 omem=0 tot-mem=37760 events=r cmd=ping user=default redir=-1 resp=2 lib-name= lib-ver=
+1:signal-handler (1708984150) Received SIGTERM scheduling shutdown...
+1:M 26 Feb 2024 21:49:10.099 * User requested shutdown...
+1:M 26 Feb 2024 21:49:10.099 * Saving the final RDB snapshot before exiting.
+1:M 26 Feb 2024 21:49:10.101 * DB saved on disk
+1:M 26 Feb 2024 21:49:10.101 # Redis is now ready to exit, bye bye...
+1:C 26 Feb 2024 21:49:39.821 * oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1:C 26 Feb 2024 21:49:39.822 * Redis version=7.2.4, bits=64, commit=00000000, modified=0, pid=1, just started
+1:C 26 Feb 2024 21:49:39.822 * Configuration loaded
+1:M 26 Feb 2024 21:49:39.823 * monotonic clock: POSIX clock_gettime
+1:M 26 Feb 2024 21:49:39.824 * Running mode=standalone, port=6379.
+1:M 26 Feb 2024 21:49:39.826 * Server initialized
+1:M 26 Feb 2024 21:49:39.827 * Ready to accept connections tcp
+1:signal-handler (1708984373) Received SIGTERM scheduling shutdown...
+1:M 26 Feb 2024 21:52:53.325 * User requested shutdown...
+1:M 26 Feb 2024 21:52:53.326 * Saving the final RDB snapshot before exiting.
+1:M 26 Feb 2024 21:52:53.328 * DB saved on disk
+1:M 26 Feb 2024 21:52:53.328 # Redis is now ready to exit, bye bye...
+1:C 26 Feb 2024 21:53:26.616 * oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1:C 26 Feb 2024 21:53:26.617 * Redis version=7.2.4, bits=64, commit=00000000, modified=0, pid=1, just started
+1:C 26 Feb 2024 21:53:26.617 * Configuration loaded
+1:M 26 Feb 2024 21:53:26.618 * monotonic clock: POSIX clock_gettime
+1:M 26 Feb 2024 21:53:26.619 * Running mode=standalone, port=6379.
+1:M 26 Feb 2024 21:53:26.620 * Server initialized
+1:M 26 Feb 2024 21:53:26.621 * Ready to accept connections tcp
+1:signal-handler (1708984428) Received SIGTERM scheduling shutdown...
+1:M 26 Feb 2024 21:53:48.601 * User requested shutdown...
+1:M 26 Feb 2024 21:53:48.602 * Saving the final RDB snapshot before exiting.
+1:M 26 Feb 2024 21:53:48.606 * DB saved on disk
+1:M 26 Feb 2024 21:53:48.607 # Redis is now ready to exit, bye bye...
+1:C 26 Feb 2024 21:54:41.925 * oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1:C 26 Feb 2024 21:54:41.926 * Redis version=7.2.4, bits=64, commit=00000000, modified=0, pid=1, just started
+1:C 26 Feb 2024 21:54:41.926 * Configuration loaded
+1:M 26 Feb 2024 21:54:41.927 * monotonic clock: POSIX clock_gettime
+1:M 26 Feb 2024 21:54:41.928 * Running mode=standalone, port=6379.
+1:M 26 Feb 2024 21:54:41.929 * Server initialized
+1:M 26 Feb 2024 21:54:41.930 * Ready to accept connections tcp
+1:M 26 Feb 2024 21:55:17.559 - Accepted 192.168.65.1:36848
+1:M 26 Feb 2024 21:55:17.572 - Client closed connection id=3 addr=192.168.65.1:36848 laddr=172.26.0.2:6379 fd=7 name= age=0 idle=0 flags=N db=0 sub=0 psub=0 ssub=0 multi=-1 qbuf=0 qbuf-free=20474 argv-mem=0 multi-mem=0 rbs=16384 rbp=16384 obl=0 oll=0 omem=0 tot-mem=37760 events=r cmd=ping user=default redir=-1 resp=2 lib-name= lib-ver=
+1:signal-handler (1708984555) Received SIGTERM scheduling shutdown...
+1:M 26 Feb 2024 21:55:55.691 * User requested shutdown...
+1:M 26 Feb 2024 21:55:55.692 * Saving the final RDB snapshot before exiting.
+1:M 26 Feb 2024 21:55:55.694 * DB saved on disk
+1:M 26 Feb 2024 21:55:55.694 # Redis is now ready to exit, bye bye...
+1:C 26 Feb 2024 21:56:26.299 * oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1:C 26 Feb 2024 21:56:26.300 * Redis version=7.2.4, bits=64, commit=00000000, modified=0, pid=1, just started
+1:C 26 Feb 2024 21:56:26.300 * Configuration loaded
+1:M 26 Feb 2024 21:56:26.301 * monotonic clock: POSIX clock_gettime
+1:M 26 Feb 2024 21:56:26.302 * Running mode=standalone, port=6379.
+1:M 26 Feb 2024 21:56:26.303 * Server initialized
+1:M 26 Feb 2024 21:56:26.305 * Ready to accept connections tcp
+1:signal-handler (1709019610) Received SIGTERM scheduling shutdown...
+1:M 27 Feb 2024 07:40:10.385 * User requested shutdown...
+1:M 27 Feb 2024 07:40:10.386 * Saving the final RDB snapshot before exiting.
+1:M 27 Feb 2024 07:40:10.389 * DB saved on disk
+1:M 27 Feb 2024 07:40:10.389 # Redis is now ready to exit, bye bye...
+1:C 27 Feb 2024 07:42:42.462 * oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1:C 27 Feb 2024 07:42:42.463 * Redis version=7.2.4, bits=64, commit=00000000, modified=0, pid=1, just started
+1:C 27 Feb 2024 07:42:42.463 * Configuration loaded
+1:M 27 Feb 2024 07:42:42.463 * monotonic clock: POSIX clock_gettime
+1:M 27 Feb 2024 07:42:42.464 * Running mode=standalone, port=6379.
+1:M 27 Feb 2024 07:42:42.465 * Server initialized
+1:M 27 Feb 2024 07:42:42.466 * Ready to accept connections tcp
+1:signal-handler (1709019833) Received SIGTERM scheduling shutdown...
+1:M 27 Feb 2024 07:43:53.094 * User requested shutdown...
+1:M 27 Feb 2024 07:43:53.095 * Saving the final RDB snapshot before exiting.
+1:M 27 Feb 2024 07:43:53.097 * DB saved on disk
+1:M 27 Feb 2024 07:43:53.097 # Redis is now ready to exit, bye bye...
+1:C 27 Feb 2024 07:44:32.400 * oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1:C 27 Feb 2024 07:44:32.400 * Redis version=7.2.4, bits=64, commit=00000000, modified=0, pid=1, just started
+1:C 27 Feb 2024 07:44:32.401 * Configuration loaded
+1:M 27 Feb 2024 07:44:32.401 * monotonic clock: POSIX clock_gettime
+1:M 27 Feb 2024 07:44:32.403 * Running mode=standalone, port=6379.
+1:M 27 Feb 2024 07:44:32.403 * Server initialized
+1:M 27 Feb 2024 07:44:32.404 * Ready to accept connections tcp
+1:signal-handler (1709019901) Received SIGTERM scheduling shutdown...
+1:M 27 Feb 2024 07:45:02.018 * User requested shutdown...
+1:M 27 Feb 2024 07:45:02.018 * Saving the final RDB snapshot before exiting.
+1:M 27 Feb 2024 07:45:02.020 * DB saved on disk
+1:M 27 Feb 2024 07:45:02.021 # Redis is now ready to exit, bye bye...
+1:C 27 Feb 2024 07:45:32.014 * oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1:C 27 Feb 2024 07:45:32.014 * Redis version=7.2.4, bits=64, commit=00000000, modified=0, pid=1, just started
+1:C 27 Feb 2024 07:45:32.015 * Configuration loaded
+1:M 27 Feb 2024 07:45:32.016 * monotonic clock: POSIX clock_gettime
+1:M 27 Feb 2024 07:45:32.017 * Running mode=standalone, port=6379.
+1:M 27 Feb 2024 07:45:32.019 * Server initialized
+1:M 27 Feb 2024 07:45:32.021 * Ready to accept connections tcp

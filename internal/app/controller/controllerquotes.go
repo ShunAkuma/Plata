@@ -7,6 +7,7 @@ import (
 	"ratequotes/internal/app/usecase"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type controller interface {
@@ -15,10 +16,14 @@ type controller interface {
 	GetLastQuotes(*gin.Context, usecase.QuotesUseCase, adapter.QuotesRepository)
 }
 
-type QuotesController struct{}
+type QuotesController struct {
+	symbols map[string]bool
+}
 
-func NewController() controller {
-	return &QuotesController{}
+func NewController(symbolsMap map[string]bool) controller {
+	return &QuotesController{
+		symbols: symbolsMap,
+	}
 }
 
 // UdapteQuotesRate godoc
@@ -34,17 +39,29 @@ func NewController() controller {
 // @Failure      500  {object}  model.Response
 // @Router       /updatequotes [post]
 func (c QuotesController) UpdateQuotesContolller(ctx *gin.Context, quotesUseCase usecase.QuotesUseCase, quotesRepos adapter.QuotesRepository, facadeRep adapter.ExternalApiRepository) {
-	var currencyCode string
+	var currencyCode string = ctx.Query("CurrencyCode")
 
-	if ctx.Query("CurrencyCode") == "" {
-		ctx.JSON(http.StatusBadRequest, model.Response{StatusCode: 400, Message: "Error: not enough input parameters", ResultObj: nil})
+	if currencyCode == "" {
+		ctx.JSON(http.StatusBadRequest, model.Response{Message: "Error: not enough input parameters", ResultObj: nil})
 		return
 	}
+
 	if err := ctx.ShouldBindQuery(&currencyCode); err != nil {
-		ctx.JSON(http.StatusBadRequest, model.Response{StatusCode: 400, Message: "Error: bind value", ResultObj: nil})
+		ctx.JSON(http.StatusBadRequest, model.Response{Message: "Error: bind value", ResultObj: nil})
 		return
 	}
-	quotesUseCase.UpdateQuotes(ctx, currencyCode)
+
+	if _, ok := c.symbols[currencyCode]; !ok {
+		ctx.JSON(http.StatusBadRequest, model.Response{Message: "Bad currency code", ResultObj: nil})
+		return
+	}
+
+	requestId := uuid.New()
+
+	go quotesUseCase.UpdateQuotes(ctx, currencyCode, requestId.String(), quotesRepos, facadeRep)
+
+	ctx.JSON(http.StatusOK, model.Response{Message: "Request Id", ResultObj: requestId})
+	return
 }
 
 // GetQuotesById godoc
@@ -64,11 +81,11 @@ func (c QuotesController) GetQuotes(ctx *gin.Context, quotesUseCase usecase.Quot
 	var updateId int
 
 	if ctx.Query("UpdateId") == "" {
-		ctx.JSON(http.StatusBadRequest, model.Response{StatusCode: 400, Message: "Error: not enough input parameters", ResultObj: nil})
+		ctx.JSON(http.StatusBadRequest, model.Response{Message: "Error: not enough input parameters", ResultObj: nil})
 		return
 	}
 	if err := ctx.ShouldBindQuery(&updateId); err != nil {
-		ctx.JSON(http.StatusBadRequest, model.Response{StatusCode: 400, Message: "Error: bind value", ResultObj: nil})
+		ctx.JSON(http.StatusBadRequest, model.Response{Message: "Error: bind value", ResultObj: nil})
 		return
 	}
 	quotesUseCase.GetQuotesById(ctx, updateId)
@@ -90,11 +107,11 @@ func (c QuotesController) GetLastQuotes(ctx *gin.Context, quotesUseCase usecase.
 	var currencyCode string
 
 	if ctx.Query("CurrencyCode") == "" {
-		ctx.JSON(http.StatusBadRequest, model.Response{StatusCode: 400, Message: "Error: not enough input parameters", ResultObj: nil})
+		ctx.JSON(http.StatusBadRequest, model.Response{Message: "Error: not enough input parameters", ResultObj: nil})
 		return
 	}
 	if err := ctx.ShouldBindQuery(&currencyCode); err != nil {
-		ctx.JSON(http.StatusBadRequest, model.Response{StatusCode: 400, Message: "Error: bind value", ResultObj: nil})
+		ctx.JSON(http.StatusBadRequest, model.Response{Message: "Error: bind value", ResultObj: nil})
 		return
 	}
 

@@ -1,8 +1,7 @@
 package pkg
 
 import (
-	"errors"
-	"os"
+	"fmt"
 
 	"github.com/go-redis/redis"
 )
@@ -15,16 +14,20 @@ import (
 
 // NewClient creates a new Redis client
 func NewClient() (*redis.Client, error) {
-
+	// Устанавливаем соединение с Redis сервером
 	client := redis.NewClient(&redis.Options{
-		Addr:       os.Getenv("REDIS_HOST") + ":" + os.Getenv("REDIS_PORT"),
-		Password:   os.Getenv("REDIS_PASSWORD"), // no password set
-		DB:         0,                           // use default DB
-		MaxRetries: 3,
+		Addr:     "localhost:6379",
+		Password: "admin", // no password set
+		DB:       0,       // use default DB
 	})
-
-	if client == nil {
-		return nil, errors.New("Error connection to redis")
+	test := client.Ping()
+	fmt.Println("-----------", test, "----------------")
+	// Проверяем ошибку подключения к Redis
+	if err := client.Ping().Err(); err != nil {
+		return nil, fmt.Errorf("error connecting to Redis: %v", err)
 	}
+
+	fmt.Println("Connected to Redis")
+
 	return client, nil
 }

@@ -181,26 +181,7 @@ const docTemplate = `{
                 "message": {
                     "type": "string"
                 },
-                "resultObj": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.ResultObject"
-                    }
-                },
-                "statusCode": {
-                    "type": "integer"
-                }
-            }
-        },
-        "model.ResultObject": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
-                    }
-                }
+                "resultObj": {}
             }
         }
     }

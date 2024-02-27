@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"ratequotes/internal/app/adapter"
@@ -21,12 +22,18 @@ import (
 // @BasePath  /api
 func main() {
 
-}
+	pool, err := pkg.NewPostgresClient()
 
-func init() {
-
+	test := pool.Ping(context.Background())
+	fmt.Println("----------------------", test, "---------------------")
 	httpClient := http.Client{
 		Timeout: 5 * time.Second,
+	}
+	symbols := map[string]bool{
+		"EUR": true,
+		"MXN": true,
+		"USD": true,
+		"RUB": true,
 	}
 
 	quotesUseCase := usecase.NewUserUsecase()
@@ -37,7 +44,7 @@ func init() {
 	facadeRepos := adapter.NewFacadeApi(&httpClient)
 	quotesRepository := adapter.NewQuotesRepository(rclient)
 	router := gin.Default()
-	handler.Handler(&router.RouterGroup, quotesUseCase, quotesRepository, facadeRepos)
+	handler.Handler(&router.RouterGroup, quotesUseCase, quotesRepository, facadeRepos, symbols)
 
 	router.Run()
 }

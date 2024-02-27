@@ -1,7 +1,10 @@
 FROM golang:latest
 
 WORKDIR /app
- 
+
+
+COPY redis.conf /shared/redis.conf
+COPY redis.log /shared/redis.conf
 # Copies everything from your root directory into /app
 COPY . .
  

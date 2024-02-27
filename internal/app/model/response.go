@@ -5,7 +5,6 @@ type ResultObject struct {
 }
 
 type Response struct {
-	StatusCode int
-	Message    string
-	ResultObj  []ResultObject
+	Message   string
+	ResultObj interface{}
 }
