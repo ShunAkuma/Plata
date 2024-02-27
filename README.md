@@ -40,7 +40,6 @@ The first thing to do is to clone the project
 
 ```
 git clone https://github.com/ShunAkuma/Plata.git
-
 ```
 Second, go to the root directory of the project and start it.
 
@@ -48,7 +47,6 @@ Second, go to the root directory of the project and start it.
 docker-compose up
 or
 make start
-
 ```
 
 If the project started successfully ->  [swagger UI](http://localhost:8080/swagger/index.html)
@@ -58,7 +56,6 @@ If the project started successfully ->  [swagger UI](http://localhost:8080/swagg
 If you receive this error, you must do the following
 ```
 chmod 777 redis.log
-
 ```
 
 ## ⛏️ Built Using <a name = "built_using"></a>
