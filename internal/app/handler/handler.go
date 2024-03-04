@@ -15,20 +15,19 @@ type IHandler interface {
 	Handler(router *gin.RouterGroup)
 }
 type Handler struct {
-	conroller controller.Controller
+	controller controller.Controller
 }
 
 func NewHandler(conroller controller.Controller) IHandler {
 	return &Handler{
-		conroller: conroller,
+		controller: conroller,
 	}
 }
 
 func (h Handler) Handler(router *gin.RouterGroup) {
-
-	router.POST("/updatequotes", h.conroller.UpdateQuotesContolller)
-	router.GET("/quotesbyid", h.conroller.GetQuotes)
-	router.GET("/lastquotes", h.conroller.GetLastQuotes)
+	router.PATCH("/api/quotes", h.controller.UpdateQuotesContolller)
+	router.GET("/api/quotes/:id", h.controller.GetQuotes)
+	router.GET("/api/quotes/currency/:currency", h.controller.GetLastQuotes)
 
 	//Swagger
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

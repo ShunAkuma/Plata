@@ -18,7 +18,7 @@ import (
 // @description     Quotation server
 
 // @host      localhost:8080
-// @BasePath  /
+// @BasePath  /api
 func main() {
 
 	httpClient := http.Client{
@@ -31,14 +31,13 @@ func main() {
 		"RUB": true,
 	}
 	rclient, err := pkg.NewClient()
+	if err != nil {
+		log.Println("Error redis connection", err)
+	}
 	facadeRepos := adapter.NewFacadeApi(&httpClient)
 	quotesRepository := adapter.NewQuotesRepository(rclient)
 	quotesUseCase := usecase.NewUserUsecase(quotesRepository, facadeRepos)
 	quotesController := controller.NewController(symbols, quotesUseCase)
-
-	if err != nil {
-		log.Println("Error redis connection", err)
-	}
 
 	router := gin.Default()
 

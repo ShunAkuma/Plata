@@ -16,3 +16,7 @@ type ResponseQuotesModel struct {
 	TimeUpdate time.Time
 	Rates      map[string]float64
 }
+
+type QuotesRequestModel struct {
+	CurrencySymbol string `json:"currencycode"`
+}
