@@ -1,4 +1,4 @@
-basePath: /
+basePath: /api
 definitions:
   model.Response:
     description: Response model from quotes server
@@ -20,17 +20,18 @@ info:
   title: Plata backend
   version: "1.0"
 paths:
-  /lastquotes:
-    get:
+  /quotes:
+    patch:
       consumes:
       - application/json
-      description: Get last quotes with time and rate
+      description: Updating the quote in the background
       parameters:
       - description: Сurrency code
-        in: query
+        in: body
         name: CurrencyCode
         required: true
-        type: string
+        schema:
+          type: string
       produces:
       - application/json
       responses:
@@ -48,18 +49,18 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/model.Response'
-      summary: Get last quotes rate with time
+      summary: Update Quotes Rate
       tags:
       - Quotes
-  /quotesbyid:
+  /quotes/:id:
     get:
       consumes:
       - application/json
-      description: Get Get quotes rate by id from redis
+      description: Get quotes rate by id from redis
       parameters:
       - description: quotes
-        in: query
-        name: UpdateId
+        in: path
+        name: Id
         required: true
         type: string
       produces:
@@ -82,13 +83,13 @@ paths:
       summary: Get quotes rate by id
       tags:
       - Quotes
-  /updatequotes:
-    post:
+  /quotes/currency/:currency:
+    get:
       consumes:
       - application/json
-      description: Updating the quote in the background
+      description: Get last quotes with time and rate
       parameters:
-      - description: Сurrency code
+      - description: Currency code
         in: query
         name: CurrencyCode
         required: true
@@ -110,7 +111,7 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/model.Response'
-      summary: Update Quotes Rate
+      summary: Get last quotes rate with time
       tags:
       - Quotes
 swagger: "2.0"

@@ -1,10 +1,11 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin/binding"
 	"net/http"
 	"ratequotes/internal/app/model"
 	"ratequotes/internal/app/usecase"
+
+	"github.com/gin-gonic/gin/binding"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -37,7 +38,7 @@ func NewController(symbolsMap map[string]bool, quotesUseCase usecase.QuotesUseCa
 // @Param        CurrencyCode   body      string  true  "Сurrency code"
 // @Success      200  {array}   model.Response
 // @Failure      400,404  {object}  model.Response
-// @Router       /quotes [path]
+// @Router       /quotes [patch]
 func (c QuotesController) UpdateQuotesContolller(ctx *gin.Context) {
 	var quotesModel model.QuotesRequestModel
 	if err := ctx.ShouldBindBodyWith(&quotesModel, binding.JSON); err != nil {
